@@ -1,10 +1,4 @@
-from distutils.core import setup
-
-try:
-    from distutils.command.build_py import build_py_2to3 as build_py
-except ImportError:
-    from distutils.command.build_py import build_py
-
+from setuptools import setup, find_packages
 
 setup(
     name='django-sendfile',
@@ -15,16 +9,9 @@ setup(
     author_email='john@sensibledevelopment.com',
     url='https://github.com/johnsensible/django-sendfile',
     license='BSD',
-
-    requires=['Django (>=1.3)'],
     install_requires=['Django>=1.3'],
 
-    packages=['sendfile', 'sendfile.backends'],
-    package_dir={
-        'sendfile': 'sendfile',
-        'sendfile.backends': 'sendfile/backends',
-    },
-    zip_safe=True,
+    packages=find_packages(exclude=['examples']),
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
@@ -34,7 +21,5 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Topic :: Software Development :: Libraries :: Python Modules',
-    ],
-
-    cmdclass={'build_py': build_py},
+    ]
 )
