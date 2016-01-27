@@ -2,12 +2,11 @@ from __future__ import absolute_import
 
 from django.http import HttpResponse
 
-from ._internalredirect import _convert_file_to_url
-
+import os.path
+from django.conf import settings
 
 def sendfile(request, filename, **kwargs):
     response = HttpResponse()
-    url = _convert_file_to_url(filename)
-    response['X-Accel-Redirect'] = url.encode('utf-8')
-
+    relpath = os.path.relpath(filename, settings.SENDFILE_ROOT)
+    response['X-Accel-Redirect'] = os.path.join(settings.SENDFILE_URL, relpath)
     return response
