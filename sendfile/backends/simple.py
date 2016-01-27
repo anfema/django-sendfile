@@ -19,10 +19,50 @@ def sendfile(request, filename, **kwargs):
                               statobj[stat.ST_MTIME], statobj[stat.ST_SIZE]):
         return HttpResponseNotModified()
 
-    with File(open(filename, 'rb')) as f:
-        response = HttpResponse(f.chunks())
+    response = None
+
+    # Fullfill range request
+    rng = request.META.get('HTTP_RANGE', None)
+    if rng and rng.startswith('bytes='):
+        # parse range
+        rngs = rng[6:].split(",")
+        if len(rngs) == 1:
+            start = 0
+            size = statobj.st_size
+            length = size
+
+            # just one range, we can fullfill that
+            parts = rngs[0].split("-")
+            data = None
+            with open(filename, 'rb') as fp:
+                if parts[0] == "":
+                    # client wants the last x bytes
+                    start = length - int(parts[1])
+                    length = int(parts[1])
+                else:
+                    start = int(parts[0])
+
+                if parts[1] == "":
+                    # client wants a start offset
+                    start = int(parts[1])
+                    length -= start
+                else:
+                    length = int(parts[1]) - start
+
+                fp.seek(start, os.SEEK_SET)
+                data = fp.read(length)
+            if data:
+                response = HttpResponse(data, status=206)
+                response["Content-Range"] = "bytes {start}-{end}/{size}".format(start=start, end=start+length, size=size)
+                response["Content-Length"] = length
+
+    # no response from a range request, reply with complete file
+    if not response:
+        with File(open(filename, 'rb')) as f:
+            response = HttpResponse(f.chunks())
 
     response["Last-Modified"] = http_date(statobj[stat.ST_MTIME])
+    response["Accept-Ranges"] = "bytes"
     return response
 
 
