@@ -27,10 +27,6 @@ setup(
         'sendfile': 'sendfile',
         'sendfile.backends': 'sendfile/backends',
     },
-    package_data={
-        'sendfile': ['testfile.txt'],
-    },
-
     zip_safe=True,
     classifiers=[
         'Development Status :: 4 - Beta',
