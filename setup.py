@@ -8,7 +8,7 @@ except ImportError:
 
 setup(
     name='django-sendfile',
-    version="anfema",
+    version="1.0.0",
     description='Abstraction to offload file uploads to web-server (e.g. Apache with mod_xsendfile) once Django has checked permissions etc.',
     long_description=open('README.rst').read(),
     author='John Montgomery',
