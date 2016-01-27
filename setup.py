@@ -11,7 +11,7 @@ version = __import__('sendfile').__version__
 
 setup(
     name='django-sendfile',
-    version=version,
+    version="anfema",
     description='Abstraction to offload file uploads to web-server (e.g. Apache with mod_xsendfile) once Django has checked permissions etc.',
     long_description=open('README.rst').read(),
     author='John Montgomery',
