@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='django-sendfile',
-    version="1.0.0",
+    version="1.0.1",
     description='Abstraction to offload file uploads to web-server (e.g. Apache with mod_xsendfile) once Django has checked permissions etc.',
     long_description=open('README.rst').read(),
     author='John Montgomery',
